@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -35,14 +36,25 @@
             const ip = document.getElementById('ipAddress').value;
             const port = document.getElementById('port').value;
             const customerId = document.getElementById('customerID').value;
-            const url = `http://${ip}:${port}/api/Dashboard/CustomerValidation`;
+            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+            const targetUrl = `http://${ip}:${port}/api/Dashboard/CustomerValidation`;
+            const url = proxyUrl + targetUrl;
 
             fetch(url, {
                 method: 'POST',
-                headers: {'Content-Type': 'application/json'},
+                headers: {
+                    'Content-Type': 'application/json',
+                    // The proxy might require an Origin header or other headers
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
                 body: JSON.stringify({ CustomerID: customerId })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP status ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 document.getElementById('apiResponse').textContent = JSON.stringify(data, null, 2);
             })
