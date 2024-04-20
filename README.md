@@ -4,12 +4,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>API Request Interface</title>
     <style>
-        body { font-family: Arial, sans-serif; margin: 20px; }
-        label, input, button { display: block; margin: 10px 0; }
-        input, button { width: 300px; padding: 8px; }
-        button { cursor: pointer; background-color: #4CAF50; color: white; border: none; }
-        button:hover { background-color: #45a049; }
-        pre { background-color: #f4f4f4; border: 1px solid #ddd; padding: 10px; }
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        label, input, button {
+            display: block;
+            margin: 10px 0;
+        }
+        input, button {
+            width: 300px;
+            padding: 8px;
+        }
+        button {
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        pre {
+            background-color: #f4f4f4;
+            border: 1px solid #ddd;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
@@ -35,16 +55,15 @@
             const ip = document.getElementById('ipAddress').value;
             const port = document.getElementById('port').value;
             const customerId = document.getElementById('customerID').value;
-            const proxyUrl = 'https://cors-anywhere.herokuapp.com/';
+            const proxyUrl = 'https://your-proxy-url.com/'; // Substitute with your actual proxy URL
             const targetUrl = `http://${ip}:${port}/api/Dashboard/CustomerValidation`;
-            const url = proxyUrl + targetUrl;
+            const url = proxyUrl + encodeURIComponent(targetUrl);
 
             fetch(url, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    // The proxy might require an Origin header or other headers
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest' // Some proxies require this header
                 },
                 body: JSON.stringify({ CustomerID: customerId })
             })
