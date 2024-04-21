@@ -42,13 +42,26 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ CustomerID: customerId })
             })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('apiResponse').textContent = JSON.stringify(data, null, 2);
-            })
-            .catch(error => {
-                document.getElementById('apiResponse').textContent = 'Error: ' + error.message;
-            });
+            .then(handleResponse)
+            .then(showResponse)
+            .catch(handleError);
+        }
+
+        function handleResponse(response) {
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            } else {
+                return response.json();
+            }
+        }
+
+        function showResponse(data) {
+            document.getElementById('apiResponse').textContent = JSON.stringify(data, null, 2);
+        }
+
+        function handleError(error) {
+            document.getElementById('apiResponse').textContent = 'Error: ' + error.message;
+            console.error('Fetch error:', error);
         }
     </script>
 </body>
