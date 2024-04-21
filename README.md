@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -54,6 +55,13 @@
     </div>
 
     <script>
+        function handleErrors(response) {
+            if (!response.ok) {
+                return response.text().then(text => { throw new Error(text || "Server responded with an error"); });
+            }
+            return response.text();
+        }
+
         function sendMeterReadingRequest() {
             const ip = document.getElementById('meterIpAddress').value;
             const port = document.getElementById('meterPort').value;
@@ -66,9 +74,9 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ MeterSerialNumber: serialNumber, CustomerID: customerId })
             })
-            .then(response => response.json())
+            .then(handleErrors)
             .then(data => {
-                document.getElementById('meterApiResponse').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('meterApiResponse').textContent = data;
             })
             .catch(error => {
                 document.getElementById('meterApiResponse').textContent = 'Error: ' + error.message;
@@ -86,9 +94,9 @@
                 headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify({ CustomerID: customerId })
             })
-            .then(response => response.json())
+            .then(handleErrors)
             .then(data => {
-                document.getElementById('customerApiResponse').textContent = JSON.stringify(data, null, 2);
+                document.getElementById('customerApiResponse').textContent = data;
             })
             .catch(error => {
                 document.getElementById('customerApiResponse').textContent = 'Error: ' + error.message;
